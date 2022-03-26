@@ -1,19 +1,25 @@
 <script lang="ts">
-  import Letter from '@components/Letter/Letter.svelte';
-  import { letterStatus } from '@utils/index';
+  import type { Status } from 'components/Letter/Letter.svelte';
+  import Letter from 'components/Letter/Letter.svelte';
 
-  const correctWord = localStorage.getItem('correctWord');
+  interface ResultItem {
+    letter: string;
+    status: Status;
+    index: number;
+  }
 
-  export let word: string;
-  export let submitted: boolean = false;
+  export let word: string = '';
+  export let result: ResultItem[] = [];
 </script>
 
 <div class="flex flex-row gap-x-4">
-  {#each word.toLowerCase().split('') as letter, index}
-    <Letter
-      {letter}
-      status={letterStatus(correctWord, letter, index)}
-      showResult={submitted}
-    />
-  {/each}
+  {#if result.length > 0}
+    {#each word.split('') as letter, index}
+      <Letter
+        {letter}
+        status={result[index]?.status}
+        showResult={result.length > 0}
+      />
+    {/each}
+  {/if}
 </div>

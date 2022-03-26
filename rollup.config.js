@@ -8,6 +8,10 @@ import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
 import path from 'path';
+import replace from '@rollup/plugin-replace';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 const projectRootDir = path.resolve(__dirname);
 const production = !process.env.ROLLUP_WATCH;
@@ -46,14 +50,17 @@ export default {
     file: 'public/build/bundle.js'
   },
   plugins: [
+    replace({
+      process: JSON.stringify({ env: process.env })
+    }),
     alias({
       entries: [
         {
-          find: '@components',
+          find: 'components',
           replacement: path.resolve(projectRootDir, 'src/components')
         },
         {
-          find: '@containers',
+          find: 'containers',
           replacement: path.resolve(projectRootDir, 'src/containers')
         },
         {

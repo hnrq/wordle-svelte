@@ -6,8 +6,8 @@
     "types": ["jest", "node", "@testing-library/jest-dom"],
     "baseUrl": "./src",
     "paths": {
-      "@components/*": ["components/*"],
-      "@containers/*": ["containers/*"],
+      "components/*": ["components/*"],
+      "containers/*": ["containers/*"],
       "@utils/*": ["utils/*"]
     }
   }

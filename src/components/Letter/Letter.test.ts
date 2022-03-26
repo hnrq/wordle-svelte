@@ -11,28 +11,28 @@ describe('<Letter />', () => {
   });
 
   describe('result', () => {
-    it("renders with 'correct' class if the status is equal correct", () => {
+    it("renders with 'green' class if the status is equal correct", () => {
       const letter = 'F';
       const status = 'correct';
       const { getAllByText } = render(Letter, { letter, status });
 
-      expect(getAllByText(letter)[1]).toHaveClass(status);
+      expect(getAllByText(letter)[1]).toHaveClass('green');
     });
 
-    it("renders with 'misplaced' class if the status is equal misplaced", () => {
+    it("renders with 'green' class if the status is equal present", () => {
       const letter = 'F';
-      const status = 'misplaced';
+      const status = 'present';
       const { getAllByText } = render(Letter, { letter, status });
 
-      expect(getAllByText(letter)[1]).toHaveClass(status);
+      expect(getAllByText(letter)[1]).toHaveClass('yellow');
     });
 
-    it("renders with 'incorrect' class if the status is equal incorrect", () => {
+    it("renders with 'grey' class if the status is equal absent", () => {
       const letter = 'F';
-      const status = 'incorrect';
+      const status = 'absent';
       const { getAllByText } = render(Letter, { letter, status });
 
-      expect(getAllByText(letter)[1]).toHaveClass(status);
+      expect(getAllByText(letter)[1]).toHaveClass('grey');
     });
   });
 });

@@ -1,5 +1,9 @@
+<script lang="ts" context="module">
+  export type Status = 'absent' | 'present' | 'correct' | 'unsubmitted';
+</script>
+
 <script lang="ts">
-  export let status: 'correct' | 'incorrect' | 'misplaced' | '' = '';
+  export let status: Status = 'unsubmitted';
   export let showResult: boolean = false;
   export let letter: string;
 </script>
@@ -9,7 +13,14 @@
   class:show-result={showResult}
 >
   <div class="front">{letter}</div>
-  <div class={`back ${status}`}>{letter}</div>
+  <div
+    class="back"
+    class:yellow={status === 'present'}
+    class:green={status === 'correct'}
+    class:grey={status === 'absent'}
+  >
+    {letter}
+  </div>
 </div>
 
 <style lang="postcss">
@@ -59,22 +70,22 @@
       transition-duration: theme('transitionDuration.500');
     }
 
-    .correct,
-    .incorrect,
-    .misplaced {
+    .green,
+    .yellow,
+    .grey {
       color: theme('textColor.white');
       transform: rotateX(180deg);
     }
 
-    .correct {
+    .green {
       background-color: theme('backgroundColor.emerald.500');
     }
 
-    .incorrect {
+    .grey {
       background-color: theme('borderColor.slate.500');
     }
 
-    .misplaced {
+    .yellow {
       background-color: theme('backgroundColor.amber.500');
     }
   }

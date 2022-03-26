@@ -1,9 +1,12 @@
 <script>
-  import Word from '@containers/Word/Word.svelte';
+  import Word from 'containers/Word/Word.svelte';
+
+  const guess = 'guess';
+  const result = `${process.env.API_HOST}/daily?guess=${guess}`;
 </script>
 
 <div>
-  <Word word="Throw" />
+  <Word word={guess} />
 </div>
 
 <style lang="postcss" global>
