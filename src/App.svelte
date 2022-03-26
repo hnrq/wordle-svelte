@@ -1,12 +1,9 @@
 <script>
-  import Letter from '@components/Letter/Letter.svelte';
+  import Word from '@containers/Word/Word.svelte';
 </script>
 
 <div>
-  <Letter letter="L" />
-  <Letter letter="O" />
-  <Letter letter="S" />
-  <Letter letter="T" />
+  <Word word="Throw" />
 </div>
 
 <style lang="postcss" global>

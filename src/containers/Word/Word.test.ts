@@ -11,4 +11,13 @@ describe('<Word />', () => {
       expect(getByText(letter)).toBeInTheDocument();
     });
   });
+
+  it('renders the result for each letter if submitted equals true', () => {
+    const word = 'THROW';
+    const { getByText } = render(Word, { word, submitted: true });
+
+    word.split('').forEach(letter => {
+      expect(getByText(letter).parentElement).toHaveClass('show-result');
+    });
+  });
 });
