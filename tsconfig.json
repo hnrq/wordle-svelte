@@ -1,6 +1,6 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
-  "include": ["src/**/*", "__tests__/components/index.test.ts"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules/*", "__sapper__/*", "public/*"],
   "compilerOptions": {
     "types": ["jest", "node", "@testing-library/jest-dom"],
@@ -9,6 +9,7 @@
       "components/*": ["components/*"],
       "containers/*": ["containers/*"],
       "@utils/*": ["utils/*"]
-    }
+    },
+    "resolveJsonModule": true
   }
 }

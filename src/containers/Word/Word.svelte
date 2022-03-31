@@ -1,25 +1,19 @@
 <script lang="ts">
-  import type { Status } from 'components/Letter/Letter.svelte';
+  import type { Result } from 'stores/guesses';
   import Letter from 'components/Letter/Letter.svelte';
 
-  interface ResultItem {
-    letter: string;
-    status: Status;
-    index: number;
-  }
-
-  export let word: string = '';
-  export let result: ResultItem[] = [];
+  export let word: string[] = [];
+  export let result: Result[] = [];
 </script>
 
-<div class="flex flex-row gap-x-4">
-  {#if result.length > 0}
-    {#each word.split('') as letter, index}
-      <Letter
-        {letter}
-        status={result[index]?.status}
-        showResult={result.length > 0}
-      />
-    {/each}
-  {/if}
+<div class="flex flex-row gap-x-1 word">
+  {#each Array.from({ length: 5 }) as _, index}
+    <Letter
+      frontStyle={`transition-delay: ${200 * index}ms`}
+      backStyle={`transition-delay: ${200 * index}ms`}
+      letter={word[index] ?? ''}
+      status={result?.[index]?.status}
+      showResult={result.length > 0}
+    />
+  {/each}
 </div>

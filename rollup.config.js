@@ -1,14 +1,15 @@
 import svelte from 'rollup-plugin-svelte';
 import alias from '@rollup/plugin-alias';
 import commonjs from '@rollup/plugin-commonjs';
+import json from '@rollup/plugin-json';
 import resolve from '@rollup/plugin-node-resolve';
 import livereload from 'rollup-plugin-livereload';
+import replace from '@rollup/plugin-replace';
 import { terser } from 'rollup-plugin-terser';
 import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
 import path from 'path';
-import replace from '@rollup/plugin-replace';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -50,9 +51,7 @@ export default {
     file: 'public/build/bundle.js'
   },
   plugins: [
-    replace({
-      process: JSON.stringify({ env: process.env })
-    }),
+    json(),
     alias({
       entries: [
         {
@@ -64,14 +63,26 @@ export default {
           replacement: path.resolve(projectRootDir, 'src/containers')
         },
         {
-          find: '@utils',
+          find: 'utils',
           replacement: path.resolve(projectRootDir, 'src/utils')
+        },
+        {
+          find: 'assets',
+          replacement: path.resolve(projectRootDir, 'src/assets')
+        },
+        {
+          find: 'stores',
+          replacement: path.resolve(projectRootDir, 'src/stores')
         }
       ]
     }),
     svelte({
       preprocess: sveltePreprocess({
         sourceMap: !production,
+        replace: Object.entries(process.env).map(([key, value]) => [
+          `process.env.${key}`,
+          JSON.stringify(value)
+        ]),
         postcss: {
           plugins: [require('tailwindcss')(), require('autoprefixer')()]
         }
@@ -110,7 +121,17 @@ export default {
 
     // If we're building for production (npm run build
     // instead of npm run dev), minify
-    production && terser()
+    production && terser(),
+
+    replace({
+      ...Object.entries(process.env).reduce(
+        (acc, [key, value]) => ({
+          ...acc,
+          [`process.env.${key}`]: JSON.stringify(value)
+        }),
+        {}
+      )
+    })
   ],
   watch: {
     clearScreen: false

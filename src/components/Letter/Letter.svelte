@@ -1,23 +1,23 @@
 <script lang="ts" context="module">
-  export type Status = 'absent' | 'present' | 'correct' | 'unsubmitted';
+  import type { Status } from 'stores/guesses/index';
 </script>
 
 <script lang="ts">
+  export let backStyle = '';
+  export let frontStyle = '';
   export let status: Status = 'unsubmitted';
   export let showResult: boolean = false;
-  export let letter: string;
+  export let letter: string = '';
 </script>
 
-<div
-  class={`letter-container px-2 py-3 text-center`}
-  class:show-result={showResult}
->
-  <div class="front">{letter}</div>
+<div class={`letter px-2 py-3 text-center`} class:show-result={showResult}>
+  <div class="front" style={frontStyle}>{letter}</div>
   <div
     class="back"
     class:yellow={status === 'present'}
     class:green={status === 'correct'}
     class:grey={status === 'absent'}
+    style={backStyle}
   >
     {letter}
   </div>
@@ -27,7 +27,7 @@
   @tailwind components;
 
   @layer components {
-    .letter-container {
+    .letter {
       position: relative;
       width: theme('width.16');
       height: theme('height.16');
@@ -52,15 +52,19 @@
     }
 
     .front {
+      color: theme('textColor.stone.200');
       border-width: theme('borderWidth.2');
-      border-color: theme('borderColor.slate.500');
+      border-color: theme('borderColor.stone.800');
     }
 
     .front,
     .back {
+      text-transform: uppercase;
       position: absolute;
-      width: 100%;
+      top: 0;
+      left: 0;
       height: 100%;
+      width: 100%;
       align-items: center;
       display: flex;
       justify-content: center;
