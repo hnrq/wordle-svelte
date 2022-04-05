@@ -9,8 +9,8 @@
 <div class="flex flex-row gap-x-1 word">
   {#each Array.from({ length: 5 }) as _, index}
     <Letter
-      frontStyle={`transition-delay: ${200 * index}ms`}
-      backStyle={`transition-delay: ${200 * index}ms`}
+      frontStyle={`transition-delay: ${250 * index}ms`}
+      backStyle={`transition-delay: ${250 * index}ms`}
       letter={word[index] ?? ''}
       status={result?.[index]?.status}
       showResult={result.length > 0}

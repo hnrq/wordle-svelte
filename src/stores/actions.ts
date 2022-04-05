@@ -1,3 +1,4 @@
+import { mergeKeyboard } from 'utils';
 import guessesStore from './guesses';
 import keyboardStore from './keyboard';
 
@@ -49,8 +50,7 @@ export const guess = async (word: string[]) => {
     currentTry: currentTry + 1
   }));
 
-  keyboardStore.update(currValue => ({
-    ...currValue,
-    ...response.keyboard
-  }));
+  keyboardStore.update(currValue =>
+    mergeKeyboard(currValue, response.keyboard)
+  );
 };

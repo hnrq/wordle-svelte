@@ -20,7 +20,9 @@ export interface State {
 
 const localStorageKey = 'guesses';
 
-export const initialValue: State = {
+export const initialValue: State = JSON.parse(
+  localStorage?.getItem(localStorageKey)
+) ?? {
   guesses: Array.from({ length: 6 }).fill({ word: [], result: [] }) as Guess[],
   currentTry: 0
 };
