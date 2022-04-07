@@ -1,17 +1,28 @@
 <script lang="ts">
   import Word from 'containers/Word/Word.svelte';
-  import guessesStore from 'stores/guesses';
+  import type { State as GuessesState } from 'stores/guesses';
+  import guessesStore, { MAX_GUESSES } from 'stores/guesses';
 
-  let store;
+  let store: GuessesState;
+  let guesses: Word[] = [];
 
-  guessesStore.subscribe(value => {
+  guessesStore.subscribe((value: GuessesState) => {
+    if (
+      value?.guesses[value.currentTry]?.isValid === false &&
+      store?.guesses[value.currentTry]?.isValid !==
+        value?.guesses[value.currentTry]?.isValid
+    )
+      guesses?.[store.currentTry]?.shake();
+
+    if (value.correct) guesses?.[store?.currentTry ?? 0]?.bounce();
     store = value;
   });
 </script>
 
 <div class="flex flex-col gap-y-2">
-  {#each Array.from({ length: 6 }) as _, index}
+  {#each Array.from({ length: MAX_GUESSES }) as _, index}
     <Word
+      bind:this={guesses[index]}
       result={store.guesses[index]?.result ?? []}
       word={store.guesses[index]?.word}
     />

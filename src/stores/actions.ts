@@ -3,9 +3,10 @@ import guessesStore from './guesses';
 import keyboardStore from './keyboard';
 
 export const addGuessLetter = (letter: string) =>
-  guessesStore.update(({ guesses, currentTry }) => ({
-    guesses: guesses.map((guess, index) =>
-      index === currentTry
+  guessesStore.update(state => ({
+    ...state,
+    guesses: state.guesses.map((guess, index) =>
+      index === state.currentTry
         ? {
             ...guess,
             word:
@@ -14,14 +15,14 @@ export const addGuessLetter = (letter: string) =>
                 : guess.word
           }
         : guess
-    ),
-    currentTry
+    )
   }));
 
 export const removeGuessLetter = (letter?: string) =>
-  guessesStore.update(({ guesses, currentTry }) => ({
-    guesses: guesses.map((guess, index) =>
-      index === currentTry
+  guessesStore.update(state => ({
+    ...state,
+    guesses: state.guesses.map((guess, index) =>
+      index === state.currentTry
         ? {
             ...guess,
             word: letter
@@ -29,14 +30,35 @@ export const removeGuessLetter = (letter?: string) =>
               : guess.word.slice(0, -1)
           }
         : guess
-    ),
-    currentTry
+    )
   }));
+
+export const isGuessValid = async (word: string[]) => {
+  const response = await (
+    await fetch(`${process.env.API_HOST}/${word.join('')}/valid`)
+  ).json();
+
+  guessesStore.update(state => ({
+    ...state,
+    guesses: state.guesses.map((guess, index) =>
+      index === state.currentTry
+        ? {
+            ...guess,
+            isValid: Boolean(response)
+          }
+        : guess
+    )
+  }));
+
+  return Boolean(response);
+};
 
 export const guess = async (word: string[]) => {
   const response = await (
-    await fetch(`${process.env.API_HOST}/${word.join('')}`)
+    await fetch(`${process.env.API_HOST}/guess/${word.join('')}`)
   ).json();
+
+  const correct = response.result.every(result => result.status === 'correct');
 
   guessesStore.update(({ guesses, currentTry }) => ({
     guesses: guesses.map((guess, index) =>
@@ -47,7 +69,8 @@ export const guess = async (word: string[]) => {
           }
         : guess
     ),
-    currentTry: currentTry + 1
+    currentTry: currentTry + 1,
+    correct
   }));
 
   keyboardStore.update(currValue =>

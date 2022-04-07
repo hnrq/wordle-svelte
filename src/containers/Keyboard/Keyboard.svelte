@@ -2,31 +2,41 @@
   import Key from 'components/Key/Key.svelte';
   import MdBackspace from 'svelte-icons/md/MdBackspace.svelte';
   import letters from 'assets/letters.json';
-  import guessesStore from 'stores/guesses/index';
+  import guessesStore, { MAX_GUESSES } from 'stores/guesses/index';
   import keyboardStore from 'stores/keyboard/index';
-  import { addGuessLetter, removeGuessLetter, guess } from 'stores/actions';
+  import type { State as GuessesState } from 'stores/guesses/index';
+  import type { State as KeyboardState } from 'stores/keyboard/index';
+  import {
+    addGuessLetter,
+    removeGuessLetter,
+    guess,
+    isGuessValid
+  } from 'stores/actions';
 
   const keys = Object.keys(letters);
   const firstLine = keys.slice(0, 10);
   const secondLine = keys.slice(10, 19);
   const thirdLine = keys.slice(19);
-  let guessesState;
-  let keyboardState;
+  let guessesState: GuessesState;
+  let keyboardState: KeyboardState;
 
-  keyboardStore.subscribe(currState => {
-    keyboardState = currState;
+  keyboardStore.subscribe(state => {
+    keyboardState = state;
   });
 
-  guessesStore.subscribe(currState => {
-    guessesState = currState;
+  guessesStore.subscribe(state => {
+    guessesState = state;
   });
 
-  const handleKey = (letter: string) => {
-    let { guesses, currentTry } = guessesState;
-    if (keys.includes(letter)) addGuessLetter(letter);
-    if (letter === 'Backspace') removeGuessLetter();
-    if (letter === 'Enter' && guesses[currentTry].word.length === 5) {
-      guess(guesses[currentTry].word);
+  const handleKey = async (letter: string) => {
+    if (guessesState.currentTry <= MAX_GUESSES && !guessesState.correct) {
+      let { guesses, currentTry } = guessesState;
+      if (keys.includes(letter)) addGuessLetter(letter);
+      if (letter === 'Backspace') removeGuessLetter();
+      if (letter === 'Enter') {
+        const isValid = await isGuessValid(guesses[currentTry].word);
+        if (isValid) guess(guesses[currentTry].word);
+      }
     }
   };
 </script>

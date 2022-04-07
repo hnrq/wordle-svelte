@@ -2,7 +2,7 @@
   import Keyboard from 'containers/Keyboard/Keyboard.svelte';
   import Guesses from 'containers/Guesses/Guesses.svelte';
 
-  const today = new Intl.DateTimeFormat('en-US').format(new Date());
+  const today = new Date().toISOString().slice(0, 10);
   if (today !== localStorage.getItem('date')) localStorage.clear();
 
   localStorage.setItem('date', today);

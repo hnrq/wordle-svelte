@@ -8,9 +8,21 @@
   export let status: Status = 'unsubmitted';
   export let showResult: boolean = false;
   export let letter: string = '';
+  export let position: number = 0;
+  let animation = '';
+
+  $: !letter && (animation = '');
+
+  export const bounce = () => {
+    setTimeout(() => (animation = 'bounce'), position * 100);
+  };
 </script>
 
-<div class={`letter px-2 py-3 text-center`} class:show-result={showResult}>
+<div
+  class={`letter px-2 py-3 text-center`}
+  class:show-result={showResult}
+  data-animation={animation}
+>
   <div class="front" style={frontStyle}>{letter}</div>
   <div
     class="back"
@@ -37,6 +49,11 @@
       text-align: center;
       transition-property: transform;
       transition-duration: theme('transitionDuration.500');
+    }
+
+    .letter[data-animation='bounce'] {
+      animation: bounce 1s;
+      animation-delay: 1.5s;
     }
 
     .show-result .back {
@@ -91,6 +108,28 @@
 
     .yellow {
       background-color: theme('backgroundColor.amber.500');
+    }
+  }
+
+  @keyframes bounce {
+    0%,
+    20% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-30px);
+    }
+    50% {
+      transform: translateY(5px);
+    }
+    60% {
+      transform: translateY(-15px);
+    }
+    80% {
+      transform: translateY(2px);
+    }
+    100% {
+      transform: translateY(0);
     }
   }
 </style>
