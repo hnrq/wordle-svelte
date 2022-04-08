@@ -30,7 +30,7 @@
       font-weight: theme('fontWeight.bold');
       border-radius: theme('borderRadius.md');
       color: theme('textColor.white');
-      transition-property: all;
+      transition-property: background-color;
       transition-delay: 1.5s;
       transition-duration: theme('transitionDuration.200');
       display: flex;

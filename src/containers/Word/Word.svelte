@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Result } from 'stores/guesses';
+  import { GUESS_LENGTH, type Result } from 'stores/guesses';
   import Letter from 'components/Letter/Letter.svelte';
 
   export let word: string[] = [];
@@ -21,7 +21,7 @@
   data-animation={animation}
   on:animationend={() => (animation = '')}
 >
-  {#each Array.from({ length: 5 }) as _, index}
+  {#each Array.from({ length: GUESS_LENGTH }) as _, index}
     <Letter
       bind:this={letters[index]}
       position={index}
